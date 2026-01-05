@@ -268,8 +268,15 @@ function getNextFridayThe13th(date) {
  * Date(2024, 5, 1) => 2
  * Date(2024, 10, 10) => 4
  */
-function getQuarter(/* date */) {
-  throw new Error('Not implemented');
+function getQuarter(date) {
+  const month = date.getMonth();
+  let quater;
+  if (month < 3) quater = 1;
+  else if (month > 2 && month < 6) quater = 2;
+  else if (month > 5 && month < 9) quater = 3;
+  else quater = 4;
+
+  return quater;
 }
 
 /**
@@ -290,8 +297,32 @@ function getQuarter(/* date */) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
-  throw new Error('Not implemented');
+function getWorkSchedule(period, countWorkDays, countOffDays) {
+  function parseDate(dateStr) {
+    const [day, month, year] = dateStr.split('-');
+    return new Date(year, month - 1, day);
+  }
+  function format(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+  const start = parseDate(period.start);
+  const end = parseDate(period.end);
+  const shedule = [];
+  let dayCounter = 0;
+  const totalPatternDays = countWorkDays + countOffDays;
+
+  while (start <= end) {
+    if (dayCounter % totalPatternDays < countWorkDays) {
+      shedule.push(format(start));
+    }
+    start.setDate(start.getDate() + 1);
+    dayCounter += 1;
+  }
+  return shedule;
 }
 
 /**
