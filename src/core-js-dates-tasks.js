@@ -96,28 +96,33 @@ function getDayName(date) {
  * Date('2024-02-13T00:00:00Z') => Date('2024-02-16T00:00:00Z')
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
-function getNextFriday(/* date */) {
-  // let nextFriday = date.getUTCDay();
-  // let tomorrow = new Date(
-  //   date.getUTCFullYear(),
-  //   date.getUTCMonth(),
-  //   date.getUTCDate() + 1,
-  //   date.getUTCHours(),
-  //   date.getUTCMinutes(),
-  //   date.getUTCMilliseconds()
-  // );
-  // while (nextFriday !== 5) {
-  //   tomorrow = new Date(
-  //     tomorrow.getUTCFullYear(),
-  //     tomorrow.getMonth(),
-  //     tomorrow.getUTCDate() + 1,
-  //     tomorrow.getHours(),
-  //     tomorrow.getMinutes(),
-  //     tomorrow.getMilliseconds()
-  //   );
-  //   nextFriday = tomorrow.getUTCDay();
-  // }
-  // return tomorrow;
+function getNextFriday(date) {
+  let nextFriday;
+  let tomorrow = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() + 1,
+    date.getHours(),
+    date.getMinutes(),
+    date.getMilliseconds()
+  );
+
+  nextFriday = tomorrow.getDay();
+  if (nextFriday === 5) return tomorrow;
+
+  while (nextFriday !== 5) {
+    tomorrow = new Date(
+      tomorrow.getFullYear(),
+      tomorrow.getMonth(),
+      tomorrow.getDate() + 1,
+      tomorrow.getHours(),
+      tomorrow.getMinutes(),
+      tomorrow.getMilliseconds()
+    );
+    nextFriday = tomorrow.getDay();
+  }
+
+  return tomorrow;
 }
 
 /**
@@ -221,8 +226,21 @@ function formatDate(date) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  let date = new Date(year, month - 1);
+  let count = 0;
+  while (date.getMonth() === month - 1) {
+    if (date.getDay() === 0 || date.getDay() === 6) count += 1;
+    date = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1,
+      date.getHours(),
+      date.getMinutes(),
+      date.getMilliseconds()
+    );
+  }
+  return count;
 }
 
 /**
