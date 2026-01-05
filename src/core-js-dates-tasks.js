@@ -97,29 +97,11 @@ function getDayName(date) {
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
 function getNextFriday(date) {
-  let nextFriday;
-  let tomorrow = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate() + 1,
-    date.getHours(),
-    date.getMinutes(),
-    date.getMilliseconds()
-  );
+  const tomorrow = new Date(date);
+  tomorrow.setDate(date.getDate() + 1);
 
-  nextFriday = tomorrow.getDay();
-  if (nextFriday === 5) return tomorrow;
-
-  while (nextFriday !== 5) {
-    tomorrow = new Date(
-      tomorrow.getFullYear(),
-      tomorrow.getMonth(),
-      tomorrow.getDate() + 1,
-      tomorrow.getHours(),
-      tomorrow.getMinutes(),
-      tomorrow.getMilliseconds()
-    );
-    nextFriday = tomorrow.getDay();
+  while (tomorrow.getDay() !== 5) {
+    tomorrow.setDate(tomorrow.getDate() + 1);
   }
 
   return tomorrow;
@@ -227,18 +209,11 @@ function formatDate(date) {
  * 1, 2024 => 8
  */
 function getCountWeekendsInMonth(month, year) {
-  let date = new Date(year, month - 1);
+  const date = new Date(year, month - 1);
   let count = 0;
   while (date.getMonth() === month - 1) {
     if (date.getDay() === 0 || date.getDay() === 6) count += 1;
-    date = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate() + 1,
-      date.getHours(),
-      date.getMinutes(),
-      date.getMilliseconds()
-    );
+    date.setDate(date.getDate() + 1);
   }
   return count;
 }
